@@ -65,7 +65,7 @@ named-checkzone pande.mia db.pande.mia.signed
 
 
 
-## Veriviar que se está sirviendo la zona firmada
+## Verificar que se está sirviendo la zona firmada
 
 
 
