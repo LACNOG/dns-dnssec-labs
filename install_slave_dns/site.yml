@@ -1,0 +1,19 @@
+---
+# This playbook deploys a basic recursive DNS 
+#
+# (c) CarlosM, based on previous example by juancarlos@lacnic.net
+# v1 20200522
+
+- name: Instala utiles y paquetes basicos
+  hosts: all
+  remote_user: vagrant
+  become: true
+
+  roles:
+    - users_and_packages
+    - configure_bind
+
+
+#    - install_bind
+#    - copy_config
+#    - start_service

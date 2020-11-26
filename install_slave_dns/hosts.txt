@@ -1,0 +1,6 @@
+[docker_local]
+happy-everafter
+
+[docker_local:vars]
+ansible_connection=docker
+ansible_user=root

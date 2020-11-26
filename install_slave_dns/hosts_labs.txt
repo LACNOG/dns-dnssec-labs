@@ -1,0 +1,3 @@
+[secundarios_labs]
+mvuy26.labs.lacnic.net ansible_ssh_common_args='-o StrictHostKeyChecking=no' ansible_user=carlos
+stratus.labs.lacnic.net ansible_ssh_common_args='-o StrictHostKeyChecking=no' ansible_user=carlos
