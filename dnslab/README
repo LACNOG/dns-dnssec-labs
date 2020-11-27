@@ -1,0 +1,11 @@
+// LABS
+
+- Always start with the "basic" configuration, copying it to /bind/etc
+	# cp -v basic/* /bind/etc
+
+- Then copy the lab-specific files
+	# cp -v lab1/* /bind/etc
+
+- Then make your own edits
+
+- Start / restart BIND

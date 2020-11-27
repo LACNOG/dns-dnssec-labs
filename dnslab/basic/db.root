@@ -1,0 +1,11 @@
+; -- ROOT FILE -- (author) carlos@lacnic.net, LACNIC
+; -- 20100925
+; -- obviously not the real Internet root :-)
+; --
+
+.                        30  IN  NS    dnslab.ROOT.
+dnslab.ROOT.		 30  IN   A     10.0.0.10
+
+;
+; End of File
+;

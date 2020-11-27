@@ -1,0 +1,35 @@
+; ---- DNSLAB LACNIC, (a) carlos@lacnic.net ----------------
+; 20100925
+; ----------------------------------------------------------
+
+; $TTL is a BIND macro that sets all record TTLs
+; to the same value
+
+$TTL	30
+
+@	IN	SOA	tld1.	 root.localhost. (
+			      3		; Serial
+			 604800		; Refresh
+			  30		; Retry
+			2419200		; Expire
+			  30	 )	; Negative Cache TTL
+;
+@	IN	NS	ns
+
+; Plain A records
+ns	IN	A	10.0.0.20
+alicia	IN	A	40.0.0.1
+ana	IN	A	40.0.0.2
+andrea	IN	A	40.0.0.3
+
+; Plain AAAA records
+alicia	IN	AAAA	2001:13c7::1
+
+; An MX record
+tld1.	IN	MX	0 	alicia
+
+; Round robin example
+adriana	IN	A	40.0.0.4
+adriana	IN	A	40.0.0.5
+
+; -- end TLD1 zone

@@ -1,0 +1,19 @@
+;
+; BIND reverse data file for local loopback interface
+;
+$TTL	30
+@	IN	SOA	in-addr.arpa. root.localhost. (
+			      2		; Serial
+			 604800		; Refresh
+			  86400		; Retry
+			2419200		; Expire
+			 604800 )	; Negative Cache TTL
+;
+@	IN	NS	dnslab.ROOT.
+
+; -- reverse delegations
+1	IN	NS	ns.tld1.
+2	IN	NS	ns.tld2.
+3	IN	NS	ns.tld3.
+4	IN	NS	ns.tld4.
+5	IN	NS	ns.tld5.
