@@ -1,4 +1,12 @@
-// LABS
+# DNS CONFIG FILES FOR A PRIVATE ROOT
+
+Author: carlos@lacnic.net 
+
+These configuration files can be used to implement a lab environment with its own private root.
+
+## Steps to use
+
+- Create an empty bind install
 
 - Always start with the "basic" configuration, copying it to /bind/etc
 	# cp -v basic/* /bind/etc
