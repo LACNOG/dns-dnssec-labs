@@ -1,0 +1,37 @@
+---
+# ROLE users_and_packages
+#
+# 
+
+- name: Instalar dependencias para el apt y fixear el update 
+  shell: | 
+     /usr/bin/apt clean && /usr/bin/apt update
+  args:
+    executable: /bin/sh
+
+- name: Instalar dependencias para el server
+  apt: 
+    pkg: 
+      - docker.io
+      - docker-compose
+      - sudo
+      - vim-tiny
+      - figlet
+      - make
+      - rsync
+      - bind9-utils
+    update_cache: yes
+
+# - name: Crear el usuario bind9 con home en /home/bind9
+#   user: 
+#     name: "{{ item }}"
+#     state: present
+#     shell: /bin/bash
+#     home: /home/bind9
+#     append: yes
+#   loop:
+#     - bind9
+
+- name: Deshabilito UFW
+  ufw:
+    state: disabled

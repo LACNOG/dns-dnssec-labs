@@ -1,0 +1,24 @@
+$ORIGIN pande.mia.
+$TTL 15 	
+@			IN SOA	pande.mia. ops.lacnic.net. (
+				2020112600 ; serial
+				604800     ; refresh (1 week)
+				86400      ; retry (1 day)
+				2419200    ; expire (4 weeks)
+				604800     ; minimum (1 week)
+				)
+
+			NS	ns4.labs.lacnic.net.
+			NS	ns5.labs.lacnic.net.
+			NS	ns3.labs.lacnic.net.
+			TXT	"Esta zona es para las pruebas de DNS y DNSSEC de la semana de dominios de ICANN/LACNIC/ISOC"
+
+			MX	1	mail.gmail.com.
+
+; ---
+www			A       2.3.4.5
+www			A       2.3.4.6
+www			A       2.3.4.7
+
+; ---
+www			AAAA    2001:db8:cafe::1
