@@ -20,5 +20,19 @@ Se recomiendan ademas los siguientes paquetes:
 - vim-tiny
 - rsync
 
+### Inicialización usando Vagrant
+
+El ambiente puede ser instanciado en una máquina virtual local utilizando Vagrant fácilmente. Si tenemos instalado Vagrant y VirtualBox, alcanza con ejecutar el comando:
+
+```
+vagrant up
+```
+
+Este comando descarga una plantilla de VM y ejecuta los comandos para crear el ambiente del laboratorio. Una vez que este ambiente está listo, podemos accederlo mediante:
+
+```
+vagrant ssh
+```
+
 ## Descripción del ambiente
 
