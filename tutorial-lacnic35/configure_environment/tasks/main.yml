@@ -15,7 +15,6 @@
     - { dst: /root/tmp }
     - { dst: /root/tmp/lacnic }
 
-
 - name: Build docker image para servidores DNS
   shell: | 
      make build
