@@ -120,3 +120,49 @@ Reiniciar el laboratorio y verificar:
 dig soa pande.mia @100.100.1.4
 ```
 
+## Tarea 3: configurar la zona "mia" en el servidor "raiz" y delegar la zona "pande.mia"
+
+Dentro del directorio del laboratorio, editar los archivos de configuración del autoritativo que se encuentran en ```etc/grp1/raiz``` para que el servidor responda por la zona "pande.mia" (o por cualquier nombre de su gusto).
+
+1. Crear el archivo de zona "db.mia" con el siguiente contenido:
+
+```
+$TTL	10
+@	IN	SOA	mia. root.mia. (
+			      2		; Serial
+			 604800		; Refresh
+			  86400		; Retry
+			2419200		; Expire
+			 604800 )	; Negative Cache TTL
+;
+@	IN	NS	ns1.mia.
+@	IN	NS	ns2.mia.
+
+ns1	IN	A	100.100.1.2
+ns2	IN	A	100.100.1.2
+
+pande.mia.	IN	NS	ns1.pande.mia.
+pande.mia.	IN	NS	ns2.pande.mia.
+ns1.pande.mia.	IN	A	100.100.1.4
+ns2.pande.mia.	IN	A	100.100.1.5
+```
+
+2. Agregar la configuración de la zona a la configuración del servidor de nombres:
+
+Editar ```named.conf.local``` y agregar lo siguiente:
+
+```
+zone "mia" {
+        type master;
+        file "/etc/bind/db.mia";
+};
+```
+
+Reiniciar el laboratorio y verificar:
+
+```
+dig soa mia @100.100.1.2
+#
+dig ns pande.mia @100.100.1.2
+```
+
