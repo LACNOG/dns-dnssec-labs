@@ -6,3 +6,7 @@
 // organization
 //include "/etc/bind/zones.rfc1918";
 
+zone "mia" {
+        type master;
+        file "/etc/bind/db.mia";
+};

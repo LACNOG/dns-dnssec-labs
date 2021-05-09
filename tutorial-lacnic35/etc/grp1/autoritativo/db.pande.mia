@@ -1,0 +1,17 @@
+$TTL	10
+@	IN	SOA	pande.mia. root.pande.mia. (
+			      3		; Serial
+			 604800		; Refresh
+			  86400		; Retry
+			2419200		; Expire
+			 604800 )	; Negative Cache TTL
+;
+@	IN	NS	ns1.pande.mia.
+@	IN	NS	ns2.pande.mia.
+
+ns1	IN	A	100.100.1.4
+ns2	IN	A	100.100.1.5
+
+nombres IN  TXT juan
+nombres IN  TXT pedro
+nombres IN  TXT jose

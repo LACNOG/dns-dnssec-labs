@@ -1,0 +1,18 @@
+$TTL	10
+@	IN	SOA	mia. root.mia. (
+			      2		; Serial
+			 604800		; Refresh
+			  86400		; Retry
+			2419200		; Expire
+			 604800 )	; Negative Cache TTL
+;
+@	IN	NS	ns1.mia.
+@	IN	NS	ns2.mia.
+
+ns1	IN	A	100.100.1.2
+ns2	IN	A	100.100.1.2
+
+pande.mia.	IN	NS	ns1.pande.mia.
+pande.mia.	IN	NS	ns2.pande.mia.
+ns1.pande.mia.	IN	A	100.100.1.4
+ns2.pande.mia.	IN	A	100.100.1.5
