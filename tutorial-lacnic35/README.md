@@ -114,4 +114,9 @@ zone "pande.mia" {
 };
 ```
 
-Reiniciar el laboratorio.
+Reiniciar el laboratorio y verificar:
+
+```
+dig soa pande.mia @100.100.1.4
+```
+
