@@ -66,4 +66,47 @@ Para ello editamos el archivo ```etc/grp1/recursivo/named.conf.options``` para q
     };
 ```
 
+Reiniciar el laboratorio con ```docker-compose down``` && ```docker-compose up -d```    
 
+Verificar con el comando:
+
+```
+dig www.google.com @100.100.1.3
+```
+
+Si la respuesta es vacía y el status REFUSED es porque los cambios no surtieron efecto.
+
+## Tarea 2: Configurar una zona autoritativa
+
+Dentro del directorio del laboratorio, editar los archivos de configuración del autoritativo que se encuentran en ```etc/grp1/autoritativo``` para que el servidor responda por la zona "pande.mia" (o por cualquier nombre de su gusto).
+
+1. Crear el archivo de zona "db.pande.mia" con el siguiente contenido:
+
+```
+$TTL	10
+@	IN	SOA	pande.mia. root.pande.mia. (
+			      2		; Serial
+			 604800		; Refresh
+			  86400		; Retry
+			2419200		; Expire
+			 604800 )	; Negative Cache TTL
+;
+@	IN	NS	ns1.pande.mia.
+@	IN	NS	ns2.pande.mia.
+
+ns1	IN	A	100.100.1.4
+ns2	IN	A   100.100.1.5
+```
+
+2. Agregar la configuración de la zona a la configuración del servidor de nombres:
+
+Editar ```named.conf.local``` y agregar lo siguiente:
+
+```
+zone "pande.mia" {
+        type master;
+        file "/etc/bind/db.pande.mia";
+};
+```
+
+Reiniciar el laboratorio.
