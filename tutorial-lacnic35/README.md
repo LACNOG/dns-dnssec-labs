@@ -96,6 +96,11 @@ $TTL	10
 
 ns1	IN	A	100.100.1.4
 ns2	IN	A   100.100.1.5
+
+nombres IN  TXT juan
+nombres IN  TXT pedro
+nombres IN  TXT jose
+
 ```
 
 2. Agregar la configuración de la zona a la configuración del servidor de nombres:
