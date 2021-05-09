@@ -35,7 +35,7 @@ Vagrant.configure("2") do |config|
     apt-get update 
     apt-get -y install ansible net-tools figlet
     cd /vagrant
-    ansible-playbook -i hosts_tutorial.txt site.yml
+    ansible-playbook -i hosts_tutorial.txt site-lab-env.yml
     cd /vagrant
     docker-compose up -d
     usermod -a -G docker vagrant
