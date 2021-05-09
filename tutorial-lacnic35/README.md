@@ -177,3 +177,6 @@ dig @100.100.1.2 txt nombres.pande.mia
 ```
 
 Repetir esta consulta rápidamente y observar como el TTL disminuye. Esto nos indica que las respuestas que estamos viendo vienen de caché y no son autoritativas.
+
+## Tarea 5: Firma de las zona "pande.mia" y "mia"
+
