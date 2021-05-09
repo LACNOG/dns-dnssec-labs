@@ -166,3 +166,5 @@ dig soa mia @100.100.1.2
 dig ns pande.mia @100.100.1.2
 ```
 
+## Tarea 4: Configuración del recursivo para que sea unicamente un "forwarder"
+
