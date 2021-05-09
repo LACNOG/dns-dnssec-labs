@@ -48,8 +48,22 @@ El host no tiene instalado un servidor DNS pero tiene instaladas las herramienta
 
 ## Laboratorio
 
+Para poder reiniciar el estado del laboratorio en caso de que cometamos errores es conveniente primero crear un "branch" local en git.
+
+```git branch local````
+
+
 ## Tarea 1: Configurar el recursivo para que acepte consultas recursivas desde de la red 100.100.1.0/24
 
 Dentro del directorio del laboratorio, editar los archivos de configuración del recursivo que se encuentran en ```etc/grp1/recursivo``` para permitir la recursión desde la red 100.100.1.0/24.
+
+Para ello editamos el archivo ```etc/grp1/recursivo/named.conf.options``` para que la sección allow-recursion se vea así:
+
+```
+    allow-recursion {
+            127.0.0.1;
+            100.100.1.0/24;
+    };
+```
 
 
