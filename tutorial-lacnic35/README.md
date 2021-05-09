@@ -50,7 +50,7 @@ El host no tiene instalado un servidor DNS pero tiene instaladas las herramienta
 
 Para poder reiniciar el estado del laboratorio en caso de que cometamos errores es conveniente primero crear un "branch" local en git.
 
-```git branch local````
+```git branch local```
 
 
 ## Tarea 1: Configurar el recursivo para que acepte consultas recursivas desde de la red 100.100.1.0/24
