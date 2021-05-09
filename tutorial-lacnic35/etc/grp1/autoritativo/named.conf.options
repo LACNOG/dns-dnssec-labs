@@ -21,4 +21,8 @@ options {
 	dnssec-validation auto;
 
 	listen-on-v6 { any; };
+
+	allow-recursion {
+		127.0.0.1;
+	};
 };
