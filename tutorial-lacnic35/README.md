@@ -166,5 +166,14 @@ dig soa mia @100.100.1.2
 dig ns pande.mia @100.100.1.2
 ```
 
-## Tarea 4: Configuración del recursivo para que sea unicamente un "forwarder"
+## Tarea 4: Configuración de la raíz para que pueda hacer recursión en el arbol
 
+Repetir los pasos de la Tarea 1 para que el recursivo (100.100.1.2) acepte consultas recursivas.
+
+Verificar:
+
+```
+dig @100.100.1.2 txt nombres.pande.mia
+```
+
+Repetir esta consulta rápidamente y observar como el TTL disminuye. Esto nos indica que las respuestas que estamos viendo vienen de caché y no son autoritativas.
