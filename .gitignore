@@ -1,0 +1,3 @@
+install_dns_server_bind9/.vagrant/*
+install_dns_server_bind9/ubuntu-bionic-18.04-cloudimg-console.log
+.vagrant
