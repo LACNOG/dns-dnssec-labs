@@ -21,7 +21,7 @@ terraform {
 }
 
 provider "linode" {
-   token = "675d79974610727496eaccebbf4c64fb167c9f1144f5734331cc7e1fcf089ef8"
+   token = "DUMMY"
 }
 
 resource "linode_instance" "lab35" {
