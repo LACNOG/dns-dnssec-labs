@@ -4,3 +4,4 @@ install_dns_server_bind9/ubuntu-bionic-18.04-cloudimg-console.log
 .terraform
 .terraform.lock.hcl
 p.txt
+secrets
