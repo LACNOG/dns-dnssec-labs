@@ -110,7 +110,7 @@ Estos servidores son los que exponen nuestra zona públicamente
 
 Ellos son ns1 y ns2
 
-
+/**** FALTA ****/
 
 ## Firmamos la zona
 
