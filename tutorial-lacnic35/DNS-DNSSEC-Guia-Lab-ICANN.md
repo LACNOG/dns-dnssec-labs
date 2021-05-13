@@ -25,16 +25,20 @@
 |              | 100.100.X.129 (eth3)  | fd89:59e0:X:128::1 (eth3)   |
 |              | 100.100.X.1 (eth1)    | fd89:59e0:0:1::X (eth0)     |
 +--------------+-----------------------+-----------------------------+
-| grpX-soa     | 100.100.1.66 (eth0)   | fd89:59e0:X:64::66 (eth0)   |
+| grpX-soa     | 100.100.X.66 (eth0)   | fd89:59e0:X:64::66 (eth0)   |
 +--------------+-----------------------+-----------------------------+
 ```
 
-Donde:
+Donde en esta práctica **solamente** vamos a acceder a los siguientes equipos:
 
 * **grpX-cli** : cliente
 * **grpX-resolv1** y **grpX-resolv2** : servidores recursivos
 * **grpX-soa** : servidor autoritativo oculto (primario)
-* **grpX-ns1** y **grpX-ns2** : servidores autoritarios secundarios
+* **grpX-ns1** y **grpX-ns2** : servidores autoritativos secundarios
+
+
+
+---
 
 
 
@@ -118,7 +122,7 @@ Y revisamos el estado del proceso bind9
 Deberemos obtener una salida similar a la siguiente:
 
 ```
-●** named.service - BIND Domain Name Server
+● named.service - BIND Domain Name Server
    Loaded: loaded (/lib/systemd/system/named.service; enabled; vendor preset: enabled)
   Drop-In: /etc/systemd/system/service.d
        └─lxc.conf
@@ -146,9 +150,115 @@ May 13 01:38:27 resolv1.grp2.lacnic35.te-labs.training named[849]: resolver prim
 
 # Configurando servidor recursivo (Unbound)
 
+Utilizamos el contenedor "Resolv 2" (servidor recursivo) [**grpX-resolv2**]
+
+Este contenedor ya tiene descargados e instalados los paquetes de Unbound.
+
+Nos cambiamos al usuario root
+
+```
+$ sudo su -
+```
+
+Vamos al directorio /etc/bind
+
+```
+# cd /etc/unbound
+```
+
+En este momento debemos configurar algunas opciones de Unbound. Para ello editamos el archivo /etc/unbound/unbound.conf
+
+```
+# nano unbound.conf
+```
+
+Ahora añadimos las opciones para indicarle al resolver cuales son las interfaces en las que escuchará consultas, las direcciones IP que podrán enviarle consultas DNS, el puerto que utilizará (53), y algunos otros parámetros. El archivo deberá quedar de la siguiente forma:
+
+```
+# Unbound configuration file for Debian.
+#
+# See the unbound.conf(5) man page.
+#
+# See /usr/share/doc/unbound/examples/unbound.conf for a commented
+# reference config file.
+#
+# The following line includes additional configuration files from the
+# /etc/unbound/unbound.conf.d directory.
+
+server:
+        interface: 0.0.0.0
+        interface: ::0
+
+        access-control: 127.0.0.0/8 allow
+        access-control: 100.100.0.0/16 allow
+        access-control: fd89:59e0::/32 allow
+
+        port: 53
+
+        do-udp: yes
+        do-tcp: yes
+        do-ip4: yes
+        do-ip6: yes
+
+include: "/etc/unbound/unbound.conf.d/*.conf"
+```
+
+Una vez que finalizamos la edición del archivo de configuración ejecutamos un comando que nos permite crear rápidamente si la configuración está semánticamente correcta
+
+```
+# unbound-checkconf
+```
+
+Si la misma es correcta nos devolverá algo similar a lo siguiente
+
+```
+unbound-checkconf: no errors in /etc/unbound/unbound.conf
+```
+
+Finalmente reiniciamos el servidor para que tome los cambios de configuración:
+
+```
+# systemctl restart unbound
+```
+
+Y revisamos el estado del proceso bind9
+
+```
+# systemctl status unbound
+```
+
+Deberemos obtener una salida similar a la siguiente:
+
+```
+● unbound.service - Unbound DNS server
+     Loaded: loaded (/lib/systemd/system/unbound.service; enabled; vendor preset: enabled)
+    Drop-In: /etc/systemd/system/service.d
+             └─lxc.conf
+     Active: active (running) since Thu 2021-05-13 03:49:11 UTC; 13s ago
+       Docs: man:unbound(8)
+    Process: 571 ExecStartPre=/usr/lib/unbound/package-helper chroot_setup (code=exited, status=0/SUCCESS)
+    Process: 574 ExecStartPre=/usr/lib/unbound/package-helper root_trust_anchor_update (code=exited, status=0/SUCCESS)
+   Main PID: 578 (unbound)
+      Tasks: 1 (limit: 152822)
+     Memory: 7.8M
+     CGroup: /system.slice/unbound.service
+             └─578 /usr/sbin/unbound -d
+
+May 13 03:49:10 resolv2.grp2.lacnic35.te-labs.training unbound[178]: [178:0] info: [25%]=0 median[50%]=0 [75%]=0
+May 13 03:49:10 resolv2.grp2.lacnic35.te-labs.training unbound[178]: [178:0] info: lower(secs) upper(secs) recursions
+May 13 03:49:10 resolv2.grp2.lacnic35.te-labs.training unbound[178]: [178:0] info:    0.000000    0.000001 1
+May 13 03:49:11 resolv2.grp2.lacnic35.te-labs.training package-helper[577]: /var/lib/unbound/root.key has content
+May 13 03:49:11 resolv2.grp2.lacnic35.te-labs.training package-helper[577]: success: the anchor is ok
+May 13 03:49:11 resolv2.grp2.lacnic35.te-labs.training unbound[578]: [578:0] notice: init module 0: subnet
+May 13 03:49:11 resolv2.grp2.lacnic35.te-labs.training unbound[578]: [578:0] notice: init module 1: validator
+May 13 03:49:11 resolv2.grp2.lacnic35.te-labs.training unbound[578]: [578:0] notice: init module 2: iterator
+May 13 03:49:11 resolv2.grp2.lacnic35.te-labs.training unbound[578]: [578:0] info: start of service (unbound 1.9.4).
+May 13 03:49:11 resolv2.grp2.lacnic35.te-labs.training systemd[1]: Started Unbound DNS server.
+```
 
 
 
+---
 
 
 
