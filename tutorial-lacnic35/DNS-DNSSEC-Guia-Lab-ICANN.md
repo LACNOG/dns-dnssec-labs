@@ -209,7 +209,7 @@ Una vez que finalizamos la edición del archivo de configuración ejecutamos un 
 # unbound-checkconf
 ```
 
-Si la misma es correcta nos devolverá algo similar a lo siguiente
+Si la misma es correcta nos devolverá algo similar a lo siguiente:
 
 ```
 unbound-checkconf: no errors in /etc/unbound/unbound.conf
