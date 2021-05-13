@@ -290,6 +290,8 @@ ns2.grpX         AAAA        fd89:59e0:X:128::131
 
 Nuestra zona debe ser compatible con esto.
 
+
+
 ## Configurando la zona autoritativa
 
 Utilizamos el contenedor "SOA" (autoritativo primario oculto) [**grpX-soa**]
@@ -368,13 +370,147 @@ grpX.lacnic35.te-labs.training. 30 IN   SOA     grpX.lacnic35.te-labs.training. 
 
 ```
 
+
+
 ## Configuramos los autoritativos secundarios
 
 Estos servidores son los que exponen nuestra zona públicamente
 
-Ellos son ns1 y ns2
+#### Configuramos primero el servidor ns1 [**grpX-ns1**]
 
-/**** FALTA ****/
+**El servidor ns1 es un BIND** (ISC)
+
+Para ello en el archivo /etc/bind/named.conf.local configuramos los siguientes parámetros:
+
+```
+//
+// Do any local configuration here
+//
+
+// Consider adding the 1918 zones here, if they are not used in your
+// organization
+//include "/etc/bind/zones.rfc1918";
+
+zone "grpX.lacnic35.te-labs.training" {
+        type slave;
+        masters { 100.100.X.66; };
+};
+```
+
+Verificamos la configuración y si no hay errores reincidamos el servidor
+
+```
+# named-checkconf
+# systemctl restart bind9
+```
+
+Verificamos que reinicio correctamente
+
+```
+\# systemctl status bind9
+```
+
+```
+● named.service - BIND Domain Name Server
+     Loaded: loaded (/lib/systemd/system/named.service; enabled; vendor preset: enabled)
+    Drop-In: /etc/systemd/system/service.d
+             └─lxc.conf
+     Active: active (running) since Thu 2021-05-13 04:25:43 UTC; 9s ago
+       Docs: man:named(8)
+   Main PID: 739 (named)
+      Tasks: 50 (limit: 152822)
+     Memory: 103.9M
+     CGroup: /system.slice/named.service
+             └─739 /usr/sbin/named -f -u bind
+
+May 13 04:25:43 ns1.grp2.lacnic35.te-labs.training named[739]: all zones loaded
+May 13 04:25:43 ns1.grp2.lacnic35.te-labs.training named[739]: running
+May 13 04:25:43 ns1.grp2.lacnic35.te-labs.training named[739]: zone grp2.lacnic35.te-labs.training/IN: Transfer started.
+May 13 04:25:43 ns1.grp2.lacnic35.te-labs.training named[739]: transfer of 'grp2.lacnic35.te-labs.training/IN' from 100.100.2.66#53: connec>
+May 13 04:25:43 ns1.grp2.lacnic35.te-labs.training named[739]: zone grp2.lacnic35.te-labs.training/IN: transferred serial 1
+May 13 04:25:43 ns1.grp2.lacnic35.te-labs.training named[739]: transfer of 'grp2.lacnic35.te-labs.training/IN' from 100.100.2.66#53: Transf>
+May 13 04:25:43 ns1.grp2.lacnic35.te-labs.training named[739]: transfer of 'grp2.lacnic35.te-labs.training/IN' from 100.100.2.66#53: Transf>
+May 13 04:25:43 ns1.grp2.lacnic35.te-labs.training named[739]: zone grp2.lacnic35.te-labs.training/IN: sending notifies (serial 1)
+May 13 04:25:43 ns1.grp2.lacnic35.te-labs.training named[739]: managed-keys-zone: Key 20326 for zone . is now trusted (acceptance timer com>
+May 13 04:25:43 ns1.grp2.lacnic35.te-labs.training named[739]: resolver priming query complete
+```
+
+
+
+#### Configuramos ahora el servidor ns2 [**grpX-ns2**]
+
+**El servidor ns1 es un NSD** (NLnet Labs)
+
+Para ello en el archivo /etc/nsd/nsd.conf configuramos los siguientes parámetros:
+
+```
+# NSD configuration file for Debian.
+#
+# See the nsd.conf(5) man page.
+#
+# See /usr/share/doc/nsd/examples/nsd.conf for a commented
+# reference config file.
+#
+# The following line includes additional configuration files from the
+# /etc/nsd/nsd.conf.d directory.
+
+include: "/etc/nsd/nsd.conf.d/*.conf"
+
+server:
+	zonesdir: "/etc/nsd"
+
+pattern:
+	name: "fromprimary"
+	allow-notify: 100.100.X.66 NOKEY
+	request-xfr: AXFR 100.100.X.66 NOKEY
+
+zone:
+	name: "grpX.lacnic35.te-labs.training"
+	zonefile: "grpX.lacnic35.te-labs.training.forward"
+	include-pattern: "fromprimary"
+```
+
+Verificamos la configuración y si no hay errores reincidamos el servidor
+
+```
+# nsd-checkconf /etc/nsd/nsd.conf
+# systemctl restart nsd
+```
+
+Verificamos que reinicio correctamente
+
+```
+# systemctl status nsd
+```
+
+```
+● nsd.service - Name Server Daemon
+     Loaded: loaded (/lib/systemd/system/nsd.service; enabled; vendor preset: enabled)
+    Drop-In: /etc/systemd/system/service.d
+             └─lxc.conf
+     Active: active (running) since Thu 2021-05-13 05:02:35 UTC; 1min 22s ago
+       Docs: man:nsd(8)
+   Main PID: 638 (nsd)
+      Tasks: 3 (limit: 152822)
+     Memory: 114.5M
+     CGroup: /system.slice/nsd.service
+             ├─638 /usr/sbin/nsd -d
+             ├─639 /usr/sbin/nsd -d
+             └─640 /usr/sbin/nsd -d
+
+May 13 05:02:35 ns2.grp2.lacnic35.te-labs.training systemd[1]: Starting Name Server Daemon...
+May 13 05:02:35 ns2.grp2.lacnic35.te-labs.training nsd[638]: nsd starting (NSD 4.1.26)
+May 13 05:02:35 ns2.grp2.lacnic35.te-labs.training nsd[638]: [2021-05-13 05:02:35.865] nsd[638]: notice: nsd starting (NSD 4.1.26)
+May 13 05:02:35 ns2.grp2.lacnic35.te-labs.training nsd[639]: nsd started (NSD 4.1.26), pid 638
+May 13 05:02:35 ns2.grp2.lacnic35.te-labs.training nsd[639]: [2021-05-13 05:02:35.922] nsd[639]: notice: nsd started (NSD 4.1.26), pid 638
+May 13 05:02:35 ns2.grp2.lacnic35.te-labs.training systemd[1]: Started Name Server Daemon.
+```
+
+
+
+---
+
+
 
 ## Firmamos la zona
 
