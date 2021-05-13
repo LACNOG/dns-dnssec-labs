@@ -315,13 +315,13 @@ $TTL    30
 ;
 
 ; grpX 
-grpX             NS           ns1.grpX.lacnic35.te-labs.training.
-grpX             NS           ns2.grpX.lacnic35.te-labs.training.
+@             NS           ns1.grpX.lacnic35.te-labs.training.
+@             NS           ns2.grpX.lacnic35.te-labs.training.
 
-ns1.grpX         A           100.100.X.130
-ns1.grpX         AAAA        fd89:59e0:X:128::130
-ns2.grpX         A           100.100.X.131
-ns2.grpX         AAAA        fd89:59e0:X:128::131
+ns1         A           100.100.X.130
+ns1         AAAA        fd89:59e0:X:128::130
+ns2         A           100.100.X.131
+ns2         AAAA        fd89:59e0:X:128::131
 
 ;; SE PUEDEN AGREGAR MAS REGISTROS A GUSTO
 ```
