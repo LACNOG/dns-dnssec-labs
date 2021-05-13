@@ -1,3 +1,9 @@
+# Topologia de red de un grupo X [grpX]
+
+
+
+
+
 # Configurando servidor recursivo (BIND)
 
 Utilizamos el contenedor "Resolv 1" (servidor recursivo) [**grpX-resolv1**]
