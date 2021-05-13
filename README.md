@@ -6,7 +6,7 @@ Prácticas y laboratorios para aprender sobre DNS y su hermano maligno, DNSSEC.
 
 [Configuración del ambiente de laboratorio](tutorial-lacnic35/README.md)
 
-[Zonas autoritativas, firma y recursion en LACNIC 35](tutorial-lacnic35/Lab1-Autoritativo-Recursivo.md)
+[Zonas autoritativas, firma y recursion en LACNIC 35 - Version local](tutorial-lacnic35/Lab1-Autoritativo-Recursivo.md)
 
 ## LAC DNS Week 2020: Servidor autoritativo y firma de zonas
 
