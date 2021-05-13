@@ -407,7 +407,7 @@ Verificamos la configuración y si no hay errores reincidamos el servidor
 Verificamos que reinicio correctamente
 
 ```
-\# systemctl status bind9
+# systemctl status bind9
 ```
 
 ```
