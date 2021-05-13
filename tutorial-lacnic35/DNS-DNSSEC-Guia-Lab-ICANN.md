@@ -49,11 +49,11 @@ options {
 
 	listen-on-v6 { any; };
 
-	listen-on port 53 { localhost; 100.100.0.0/16; };
-	listen-on-v6 port 53 { localhost; fd89:59e0::/32; };
-	allow-query { localhost; 100.100.0.0/16; fd89:59e0::/32; };
+	listen-on port 53 { localhost; 100.100.0.0/16; };									<--- Agregar
+	listen-on-v6 port 53 { localhost; fd89:59e0::/32; };							<--- Agregar
+	allow-query { localhost; 100.100.0.0/16; fd89:59e0::/32; };				<--- Agregar
 
-	recursion yes;
+	recursion yes;																										<--- Agregar
 };
 ```
 
