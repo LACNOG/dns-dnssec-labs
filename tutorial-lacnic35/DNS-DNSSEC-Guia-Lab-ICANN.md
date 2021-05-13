@@ -277,14 +277,14 @@ Vamos a crear la zona autoritativa grp2.lacnic35.te-labs.training y luego la fir
 Nuestro "padre" ya ha creado lo siguiente en su propia zona:
 
 ```shell
-; grp2
-grp2             NS           ns1.grp2.lacnic35.te-labs.training.
-grp2             NS           ns2.grp2.lacnic35.te-labs.training.
+; grpX
+grpX             NS           ns1.grpX.lacnic35.te-labs.training.
+grpX             NS           ns2.grpX.lacnic35.te-labs.training.
 ; ---Placeholder for grp2 DS record (DO NOT MANUALLY EDIT THIS LINE)---
-ns1.grp2         A           100.100.2.130
-ns1.grp2         AAAA        fd89:59e0:2:128::130
-ns2.grp2         A           100.100.2.131
-ns2.grp2         AAAA        fd89:59e0:2:128::131
+ns1.grpX         A           100.100.X.130
+ns1.grpX         AAAA        fd89:59e0:X:128::130
+ns2.grpX         A           100.100.X.131
+ns2.grpX         AAAA        fd89:59e0:X:128::131
 
 ```
 
@@ -292,19 +292,19 @@ Nuestra zona debe ser compatible con esto.
 
 ## Configurando la zona autoritativa
 
-Utilizamos el contenedor "SOA" (autoritativo oculto) [**grpX-soa**]
+Utilizamos el contenedor "SOA" (autoritativo primario oculto) [**grpX-soa**]
 
 Vamos al directorio /etc/bind y clonamos el archivo db.empty
 
-```cp db.empty db.grp2```
+```cp db.empty db.grpX```
 
 El contenido de la zona deberá ser al menos:
 
 ```
-; grp2 
+; grpX 
 
 $TTL    30
-@       IN      SOA     grp2.lacnic35.te-labs.training. root.example.com (                                            
+@       IN      SOA     grpX.lacnic35.te-labs.training. root.example.com (                                            
                               1         ; Serial
                          604800         ; Refresh
                           86400         ; Retry
@@ -312,14 +312,14 @@ $TTL    30
                           86400 )       ; Negative Cache TTL
 ;
 
-; grp2 
-grp2             NS           ns1.grp2.lacnic35.te-labs.training.
-grp2             NS           ns2.grp2.lacnic35.te-labs.training.
+; grpX 
+grpX             NS           ns1.grpX.lacnic35.te-labs.training.
+grpX             NS           ns2.grpX.lacnic35.te-labs.training.
 
-ns1.grp2         A           100.100.2.130
-ns1.grp2         AAAA        fd89:59e0:2:128::130
-ns2.grp2         A           100.100.2.131
-ns2.grp2         AAAA        fd89:59e0:2:128::131
+ns1.grpX         A           100.100.X.130
+ns1.grpX         AAAA        fd89:59e0:X:128::130
+ns2.grpX         A           100.100.X.131
+ns2.grpX         AAAA        fd89:59e0:X:128::131
 
 ;; SE PUEDEN AGREGAR MAS REGISTROS A GUSTO
 ```
@@ -329,9 +329,9 @@ ns2.grp2         AAAA        fd89:59e0:2:128::131
 En el archivo de configuracion /etc/bind/named.conf.local colocamos el enunciado "zone":
 
 ```
-zone "grp2.lacnic35.te-labs.training" {                                                                               
+zone "grpX.lacnic35.te-labs.training" {                                                                               
         type master;                                                                                                  
-        file "/etc/bind/db.grp2";                                                                                     
+        file "/etc/bind/db.grpX";                                                                                     
         allow-transfer { any; };                                                                                      
 }; 
 ```
@@ -342,9 +342,9 @@ Reiniciamos el servidor y verificamos:
 rndc reload
 
 
-root@soa:/etc/bind# dig @localhost soa grp2.lacnic35.te-labs.training.                                                
+root@soa:/etc/bind# dig @localhost soa grpX.lacnic35.te-labs.training.                                                
 
-; <<>> DiG 9.16.1-Ubuntu <<>> @localhost soa grp2.lacnic35.te-labs.training.
+; <<>> DiG 9.16.1-Ubuntu <<>> @localhost soa grpX.lacnic35.te-labs.training.
 ; (2 servers found)
 ;; global options: +cmd
 ;; Got answer:
@@ -355,10 +355,10 @@ root@soa:/etc/bind# dig @localhost soa grp2.lacnic35.te-labs.training.
 ; EDNS: version: 0, flags:; udp: 4096
 ; COOKIE: 270e2c46ed443c1c01000000609c59f04ba85015ff71998d (good)
 ;; QUESTION SECTION:
-;grp2.lacnic35.te-labs.training.        IN      SOA
+;grpX.lacnic35.te-labs.training.        IN      SOA
 
 ;; ANSWER SECTION:
-grp2.lacnic35.te-labs.training. 30 IN   SOA     grp2.lacnic35.te-labs.training. root.example.com.grp2.lacnic35.te-labs
+grpX.lacnic35.te-labs.training. 30 IN   SOA     grpX.lacnic35.te-labs.training. root.example.com.grpX.lacnic35.te-labs
 .training. 1 604800 86400 2419200 86400
 
 ;; Query time: 0 msec
@@ -368,7 +368,7 @@ grp2.lacnic35.te-labs.training. 30 IN   SOA     grp2.lacnic35.te-labs.training. 
 
 ```
 
-## Configuramos los autoritativos esclavos
+## Configuramos los autoritativos secundarios
 
 Estos servidores son los que exponen nuestra zona públicamente
 
@@ -390,11 +390,11 @@ cd /etc/bind/keys
 
 # Generate ZSK
 
-dnssec-keygen -a RSASHA256 -3 -b 1024 -n ZONE grp2.lacnic35.te-labs.training
+dnssec-keygen -a RSASHA256 -3 -b 1024 -n ZONE grpX.lacnic35.te-labs.training
 
 # Generate KSK
 
-dnssec-keygen -f KSK -a RSASHA256 -b 2048 -3 -n ZONE grp2.lacnic35.te-labs.training
+dnssec-keygen -f KSK -a RSASHA256 -b 2048 -3 -n ZONE grpX.lacnic35.te-labs.training
 
 chown -R bind:bind /etc/bind/keys
 ```
@@ -402,17 +402,17 @@ chown -R bind:bind /etc/bind/keys
 Luego firmamos la zona:
 
 ```
-dnssec-signzone -S -P -K keys -o grp2.lacnic35.te-labs.training db.grp2 
+dnssec-signzone -S -P -K keys -o grpX.lacnic35.te-labs.training db.grpX 
 ```
 
-Finalmente sustituimos en named.conf.local el archivo db.grp2 por el db.grp2.signed y reiniciamos el servidor con ```rndc reload```
+Finalmente sustituimos en named.conf.local el archivo db.grpX por el db.grpX.signed y reiniciamos el servidor con ```rndc reload```
 
 Verificamos:
 
 ```
-root@soa:/etc/bind# dig @localhost soa grp2.lacnic35.te-labs.training. +dnssec                                                            
+root@soa:/etc/bind# dig @localhost soa grpX.lacnic35.te-labs.training. +dnssec                                                            
                                                                                                                                           
-; <<>> DiG 9.16.1-Ubuntu <<>> @localhost soa grp2.lacnic35.te-labs.training. +dnssec                                                      
+; <<>> DiG 9.16.1-Ubuntu <<>> @localhost soa grpX.lacnic35.te-labs.training. +dnssec                                                      
 ; (2 servers found)                                                                                                                       
 ;; global options: +cmd                                                                                                                   
 ;; Got answer:                                                                                                                            
@@ -423,12 +423,12 @@ root@soa:/etc/bind# dig @localhost soa grp2.lacnic35.te-labs.training. +dnssec
 ; EDNS: version: 0, flags: do; udp: 4096                                                                                                  
 ; COOKIE: 69a0c61239afd9a201000000609c5df711d4eb3a39f90d89 (good)                                                                         
 ;; QUESTION SECTION:                                                                                                                      
-;grp2.lacnic35.te-labs.training.        IN      SOA                                                                                       
+;grpX.lacnic35.te-labs.training.        IN      SOA                                                                                       
                                                                                                                                           
 ;; ANSWER SECTION:                                                                                                                        
-grp2.lacnic35.te-labs.training. 30 IN   SOA     grp2.lacnic35.te-labs.training. root.example.com.grp2.lacnic35.te-labs.training. 1 604800 
+grpX.lacnic35.te-labs.training. 30 IN   SOA     grpX.lacnic35.te-labs.training. root.example.com.grpX.lacnic35.te-labs.training. 1 604800 
 86400 2419200 86400                                                                                                                       
-grp2.lacnic35.te-labs.training. 30 IN   RRSIG   SOA 8 4 30 20210611215606 20210512215606 41110 grp2.lacnic35.te-labs.training. RmUbjShh4jX
+grpX.lacnic35.te-labs.training. 30 IN   RRSIG   SOA 8 4 30 20210611215606 20210512215606 41110 grpX.lacnic35.te-labs.training. RmUbjShh4jX
 fw384miz1G1703ObV9WrYQOOJVSbzDNchCsLayuW/UQRR w3X6eTXHOCSVOcG2Bamkbals48LYUA9Y/l2tmuaGxKkeQVT5xcy0wY/r beaN4NgUG+N13BFodOPQumsBERQ+NUDAw89
 8IfkcwcZ3pZFgIAsXplA1 MY4= 
 ```
