@@ -6,3 +6,4 @@ install_dns_server_bind9/ubuntu-bionic-18.04-cloudimg-console.log
 p.txt
 secrets
 terraform.tfstate*
+.DS_Store
