@@ -91,10 +91,9 @@ options {
 	//========================================================================
 	dnssec-validation auto;
 
-	listen-on-v6 { any; };
-
-	listen-on port 53 { localhost; 100.100.0.0/16; };									<--- Agregar
-	listen-on-v6 port 53 { localhost; fd89:59e0::/32; };							<--- Agregar
+	listen-on port 53 { any; };																				<--- Agregar
+	listen-on-v6 port 53 { any; };																		<--- Agregar
+	
 	allow-query { localhost; 100.100.0.0/16; fd89:59e0::/32; };				<--- Agregar
 
 	recursion yes;																										<--- Agregar
