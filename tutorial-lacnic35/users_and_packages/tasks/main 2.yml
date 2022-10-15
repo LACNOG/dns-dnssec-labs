@@ -1,0 +1,59 @@
+---
+# ROLE users_and_packages
+#
+# 
+
+- name: Instalar dependencias para el apt y fixear el update 
+  shell: | 
+     /usr/bin/apt clean && /usr/bin/apt update
+  args:
+    executable: /bin/sh
+
+- name: Agrega los repositorios oficiales de Docker para Ubuntu
+  shell: | 
+    apt-get install \
+        apt-transport-https \
+        ca-certificates \
+        curl \
+        gnupg \
+        lsb-release
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --yes --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+    echo \
+      "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+      $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+  args:
+    executable: /bin/sh
+
+- name: Instalar dependencias para el server
+  apt: 
+    pkg: 
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - sudo
+      - vim-tiny
+      - figlet
+      - make
+      - rsync
+      - bind9-utils
+    update_cache: yes
+
+- name: Instalar docker-compose estable
+  get_url:
+    url: https://github.com/docker/compose/releases/download/1.29.1/docker-compose-Linux-x86_64
+    dest: /usr/local/bin/docker-compose
+    mode: '0755'
+
+# - name: Crear el usuario bind9 con home en /home/bind9
+#   user: 
+#     name: "{{ item }}"
+#     state: present
+#     shell: /bin/bash
+#     home: /home/bind9
+#     append: yes
+#   loop:
+#     - bind9
+
+- name: Deshabilito UFW
+  ufw:
+    state: disabled

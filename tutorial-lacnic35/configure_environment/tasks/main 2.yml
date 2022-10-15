@@ -1,0 +1,84 @@
+---
+# ----------------------------------------------------------------------------
+# Configuracion del ambiente de docker, red y laboratorio
+# (c) Carlos 20210508
+# ----------------------------------------------------------------------------
+
+- name: Crea directorios temporarios
+  file:
+    path: '{{ item.dst }}'
+    owner: root
+    group: root
+    state: directory
+    mode: 0755
+  loop:
+    - { dst: /root/tmp }
+    - { dst: /root/tmp/lacnic }
+
+- name: Build docker image para servidores DNS
+  shell: | 
+     make build
+  args:
+    executable: /bin/bash
+
+# - name: Crea arbol de directorios en /home/bind9
+#   file:
+#     path: '{{ item.dst }}'
+#     owner: bind9
+#     group: bind9
+#     state: directory
+#     mode: 0755
+#   loop:
+#     - { dst: /home/bind9/etc }
+#     - { dst: /home/bind9/bin }
+#     - { dst: /home/bind9/var }
+#     - { dst: /home/bind9/var/zones }
+#     - { dst: /home/bind9/var/log }
+#     - { dst: /home/bind9/var/run }
+#     - { dst: /home/bind9/var/run/named }
+#     - { dst: /home/bind9/var/tmp }
+
+# - name: Copia archivos de configuración y zona root
+#   copy:
+#     src: '{{ item.src }}'
+#     dest: '{{ item.dst }}'
+#     owner: bind9
+#     group: bind9
+#     mode: 0644
+#   loop:
+#     - { src: files/db.root, dst: /home/bind9/etc/ }
+#     - { src: files/named.conf, dst: /home/bind9/etc/ }
+#     - { src: files/named.slaves.conf, dst: /home/bind9/etc/ }
+#     - { src: files/named.masters.conf, dst: /home/bind9/etc/ }
+#     - { src: files/named.logging.conf, dst: /home/bind9/etc/ }
+#     - { src: files/db.pande.mia, dst: /home/bind9/var/zones }
+
+# - name: Copia perfil de apparmor y configuracion default del servicio
+#   copy:
+#     src: '{{ item.src }}'
+#     dest: '{{ item.dst }}'
+#     owner: root
+#     group: root
+#     mode: 0611
+#   loop:
+#     - { src: files/usr.sbin.named, dst: /etc/apparmor.d/usr.sbin.named }
+#     - { src: files/etc.default.bind9, dst: /etc/default/bind9}
+
+# - name: Reinicia el proceso de apparmor
+#   service:
+#     name: apparmor
+#     state: restarted
+
+# - name: Detiene el proceso de bind9
+#   service:
+#     name: bind9
+#     state: stopped
+
+# - name: Inicia el proceso de bind9
+#   service:
+#     name: bind9
+#     state: started
+
+# # - name: Deshabilito UFW
+# #  ufw:
+# #    state: disabled

@@ -1,0 +1,32 @@
+version: "3.9"
+services:
+    raiz:
+        image: "lacnic-tutorial-base:35"
+        volumes:
+            - ${PWD}/etc/grp1/raiz:/etc/bind
+        networks:
+            grp1:
+                ipv4_address: 100.100.1.2
+    recursivo-grp1:
+        image: "lacnic-tutorial-base:35"
+        volumes:
+            - ${PWD}/etc/grp1/recursivo:/etc/bind
+        networks:
+            grp1:
+                ipv4_address: 100.100.1.3
+    autoritativo-grp1:
+        image: "lacnic-tutorial-base:35"
+        volumes:
+            - ${PWD}/etc/grp1/autoritativo:/etc/bind
+        networks:
+            grp1:
+                ipv4_address: 100.100.1.4
+networks:
+    grp1:
+        driver: bridge
+        ipam:
+            driver: default
+            config:
+                - subnet: "100.100.1.0/24"
+
+

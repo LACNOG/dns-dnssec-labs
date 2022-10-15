@@ -1,0 +1,62 @@
+---
+# ROLE users_and_packages
+#
+# 
+
+- name: Instalar dependencias para el apt y fixear el update 
+  shell: | 
+     /usr/bin/apt clean && /usr/bin/apt update
+#     apt-get -y install python3.6
+  args:
+    executable: /bin/sh
+
+# - name: Instalar repos adicionales para Ubuntu 18
+#   apt_repository:
+#     repo: deb http://archive.ubuntu.com/ubuntu bionic universe
+#     state: present
+
+# - name: Create symbolic link de python -> python3.6
+#   file:
+#     src: /usr/bin/python3.6
+#     dest: /usr/bin/python
+#     owner: root
+#     group: root
+#     state: link 
+
+- name: Instalar dependencias para el server
+  apt: 
+    pkg: 
+      - bind9
+      - bind9utils
+      - bind9-host
+      - sudo
+      - vim-tiny
+      - figlet
+    update_cache: yes
+
+- name: Crear el usuario bind9 con home en /home/bind9
+  user: 
+    name: "{{ item }}"
+    state: present
+    shell: /bin/bash
+    home: /home/bind9
+    append: yes
+  loop:
+    - bind9
+
+# - name: Copia config. de SNMP
+#  template: 
+#    src=snmpd.conf.j2 
+#    dest=/etc/snmp/snmpd.conf
+
+#- name: Copia /etc/aliases
+#  copy:
+#    src: files/aliases
+#    dest: /etc
+#    owner: root
+#    group: root
+#    mode: 0644
+
+# - name: Deshabilito UFW
+#  ufw:
+#    state: disabled
